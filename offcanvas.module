@@ -1,0 +1,231 @@
+<?php
+
+/**
+ * @file
+ * Pop-ups a full-screen navigation
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function offcanvas_block_info() {
+  $blocks['offcanvas'] = array(
+    'info' => t('Off-canvas Menu'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function offcanvas_block_configure($delta = '') {
+
+$form = array();
+
+if ($delta == 'offcanvas') {
+
+$form['offcanvas_settings'] = array(
+  '#type' => 'fieldset',
+  '#title' => t('Pop-up Navigation Main Settings'),
+
+    'offcanvas_settings_title' => array(
+    '#type' => 'checkbox',
+    '#title' => t('Show block title as Heading'),
+    '#default_value' => variable_get('offcanvas_settings_title'),
+    ),
+  'offcanvas_settings_menu' => array(
+    '#type' => 'select',
+    '#title' => t('Select a menu'),
+    '#default_value' => variable_get('offcanvas_settings_menu'),
+    '#options' => menu_get_menus(),
+    ),
+  'offcanvas_settings_depth' => array(
+    '#type' => 'select',
+    '#title' => t('Menu depth'),
+    '#default_value' => variable_get('offcanvas_settings_depth', 2),
+    '#options' => array(1,2),
+    ),
+  'offcanvas_settings_collapse' => array(
+    '#type' => 'checkbox',
+    '#title' => t('Collapse children'),
+    '#default_value' => variable_get('offcanvas_settings_collapse', FALSE),
+    ),
+  'offcanvas_settings_trigger' => array(
+    '#type' => 'textfield',
+    '#title' => t('Menu trigger title'),
+    '#default_value' => variable_get('offcanvas_settings_trigger', '<i>&#9776;</i> Menu'),
+    '#description' => t('You can use an Entypo icon font or HTML. <a href="http://www.entypo.com/characters/" target="_blank">www.entypo.com/characters</a>'),
+    ),
+    'offcanvas_settings_closer' => array(
+    '#type' => 'textfield',
+    '#title' => t('Menu closer'),
+    '#default_value' => variable_get('offcanvas_settings_closer', '<i>&#10060;</i>&nbsp;Close'),
+    '#description' => t('You can use an Entypo icon font or HTML. <a href="http://www.entypo.com/characters/" target="_blank">www.entypo.com/characters</a>'),
+    ),
+
+);
+
+
+$form['offcanvas_extra'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Extra settings'),
+
+    'offcanvas_extra_entypo' => array(
+        '#type' => 'checkbox',
+        '#title' => t('Load Entypo Font'),
+        '#default_value' => variable_get('offcanvas_extra_entypo', TRUE),
+    ),
+);
+}
+return $form;
+}
+
+/**
+* Implements hook_block_save($delta = '', $edit = array().
+*/
+function offcanvas_block_save($delta = '', $edit = array()) {
+
+    if ($delta == "offcanvas"){
+        variable_set('offcanvas_settings_menu', $edit['offcanvas_settings_menu']);
+        variable_set('offcanvas_settings_title', $edit['offcanvas_settings_title']);
+        variable_set('offcanvas_settings_depth', $edit['offcanvas_settings_depth']);
+        variable_set('offcanvas_settings_collapse', $edit['offcanvas_settings_collapse']);
+        variable_set('offcanvas_settings_trigger', $edit['offcanvas_settings_trigger']);
+        variable_set('offcanvas_settings_closer', $edit['offcanvas_settings_closer']);
+        variable_set('offcanvas_extra_entypo', $edit['offcanvas_extra_entypo']);
+    }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function offcanvas_block_view($delta = '') {
+  $block = array();
+
+   // get the selected menu data
+    $selected_menu = variable_get('offcanvas_settings_menu');
+    $menu = menu_tree_all_data($selected_menu);
+    $collapse = variable_get('offcanvas_settings_collapse');
+
+  if($delta == "offcanvas"){
+    $block['subject'] = NULL;
+    $block['content'] = array(
+        '#theme' => 'offcanvas_theme',
+        '#tree' => $menu,
+        '#attributes' => array(
+            'collapse' => $collapse,
+        ),
+        '#attached' => array(
+            'css' => array(drupal_get_path("module", "offcanvas") . '/offcanvas.css'),
+            'js' => array(
+                drupal_get_path("module", "offcanvas") . '/classie.js',
+                drupal_get_path("module", "offcanvas") . '/offcanvas.js',
+                ),
+        ),
+    );
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function offcanvas_theme($existing, $type, $theme, $path) {
+  return array(
+    'offcanvas_theme' => array(
+        'variables' => array(
+            'tree' => array(),
+            'attributes' => array(),
+        ),
+    ),
+    );
+}
+
+// We don't want to render the $block->subject, we will deal with it in theme()
+function offcanvas_preprocess_block(&$variables, $hook){
+   if ($variables['block']->module == 'offcanvas') {
+    $variables['elements']['#block']->subject = NULL;
+  }
+}
+
+function theme_offcanvas_theme($variables = array()){
+
+    offcanvas_addEntypo();
+
+    $block = block_load("offcanvas", "offcanvas");
+    $block_title = ($block->title);
+    $show_title = variable_get('offcanvas_settings_title', FALSE);
+
+    $menu_depth = variable_get('offcanvas_settings_depth');
+    $collapse = $variables['attributes']['collapse'];
+
+    $menu_trigger = variable_get('offcanvas_settings_trigger');
+    $menu_closer = variable_get('offcanvas_settings_closer');
+
+    $menu_tree = $variables['tree'];
+
+    $output = '<div id="offcanvas-menu">';
+
+    $output .= '<div id="offcanvas-canvas" class="closed" role="dialog">';
+    $output .= '<div class="offcanvas-wrapper">';
+
+    $output .= '<div class="offcanvas-close"><a href="#">'.$menu_closer.'</a></div>';
+    if($show_title){
+        $output .= '<h2>'.$block_title.'</h2>';
+    }
+    $output .= '<nav class="offcanvas-navigation ';
+    if($collapse && $menu_depth > 0){
+        $output .= 'collapse-children';
+    }
+    $output.= '">';
+        $output .= '<ul>';
+            foreach ($menu_tree as $link) {
+                $output .= '<li class="first-level item-' . $link['link']['mlid'];
+                if(!empty($link['below']) && $collapse && $menu_depth > 0) {
+                    $output .= ' parent-item ';
+                }
+                $output .= '">';
+                $output .= l($link['link']['link_title'], $link['link']['link_path'], $link['link']['options']);
+                        if($menu_depth > 0 && !empty($link['below'])) {
+                            $output .= '<ul';
+                            if($collapse && $menu_depth > 0){
+                                $output .=  ' class="child-closed" ';
+                            }
+                            $output .= '>';
+                            foreach ($link['below'] as $second_link) {
+                                $output .= '<li class="second-level item-' . $link['link']['mlid'] . '">';
+                                $output .= l($second_link['link']['link_title'], $second_link['link']['link_path'], $second_link['link']['options']);
+                                $output .= '</li>';
+                            }
+                            $output .= '</ul>';
+                        }
+                $output .= '</li>';
+            }
+        $output .= '</ul>';
+    $output .= '</nav>';
+    $output .= '</div></div>'; //#offcanvas-fullscreen and .offcanvas-wrapper
+    $output .= '<div class="offcanvas-trigger"><a href="#" tabindex="0">'.$menu_trigger.'</a></div>';
+    $output .= '</div>'; // #offcanvas-container
+    return $output;
+}
+
+function offcanvas_addEntypo(){
+
+    $load_entypo = variable_get('offcanvas_extra_entypo');
+    if($load_entypo) {
+        drupal_add_css(
+          "/*Add entypo font, called from offcanvas module*/ @font-face{font-family:entypo;src:url(".drupal_get_path("module", "offcanvas")."/fonts/entypo.woff) format('woff');src:url(" . drupal_get_path("module", "offcanvas") . "/fonts/entypo.eot) format('eot');font-stretch:normal;font-weight:400}",
+          array(
+            'group' => CSS_DEFAULT,
+            'type' => 'inline',
+            'media' => 'all',
+            'preprocess' => FALSE,
+            'weight' => '9999',
+          )
+        );
+    }
+}
+

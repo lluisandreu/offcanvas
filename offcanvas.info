@@ -1,0 +1,7 @@
+name = Off-canvas menu
+description = Off-canvas menu for Drupal 7
+core = 7.x
+version = 7.x-1.0
+package = Custom
+
+dependencies[] = menu

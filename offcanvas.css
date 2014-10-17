@@ -1,0 +1,136 @@
+/*////// Off Canvas Settings //////*/
+
+.offcanvas-page-wrapper {
+    height: 100%;
+}
+.offcanvas-page-wrapper.open {
+    overflow: hidden;
+}
+.offcanvas-page-container {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    -webkit-transform: translateX(0) translateZ(0);
+    transform: translateX(0) translateZ(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transition: -webkit-transform .33s cubic-bezier(.694, .0482, .335, 1);
+    transition: -webkit-transform .33s cubic-bezier(.694, .0482, .335, 1);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    height: 100%;
+}
+.offcanvas-page-wrapper.open .offcanvas-page-container {
+    -webkit-transform: translateX(280px);
+    transform: translateX(280px);
+    -webkit-transform: translateX(280px) tranlateZ(0);
+    transform: translateX(280px) tranlateZ(0);
+    -webkit-transform: translate3d(280px, 0, 0);
+    transform: translate3d(280px, 0, 0);
+    -webkit-transition: -webkit-transform .33s cubic-bezier(.694, .0482, .335, 1);
+    transition: -webkit-transform .33s cubic-bezier(.694, .0482, .335, 1);
+}
+.offcanvas-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #555;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -999;
+    cursor: pointer;
+    -webkit-transition: .5s ease all;
+    transition: .5s ease all;
+}
+.offcanvas-page-wrapper.open .offcanvas-overlay {
+    z-index: 999;
+    opacity: 0.6;
+}
+#offcanvas-canvas {
+    width: 280px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: -280px;
+    overflow: auto;
+}
+/*////// Off Canvas Style Settings //////*/
+
+#offcanvas-canvas {
+    background-color: #232323;
+}
+.offcanvas-close {
+    text-align: right;
+    padding: 10px 20px 10px 0;
+    margin-bottom: 10px;
+    background-color: #353535;
+}
+.offcanvas-close:hover {
+    background-color: #2d2d2d;
+}
+.offcanvas-close a, .offcanvas-close i {
+    color: #fff !important;
+    font-size: 1.4rem;
+    font-size: 1.4em;
+}
+#offcanvas-canvas h2 {
+    color: #ccc;
+    margin: 15px 0;
+    padding: 0 20px;
+    font-size: 2rem;
+    font-size: 2em;
+}
+#offcanvas-canvas ul {
+    margin: 0;
+}
+#offcanvas-canvas ul li {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+#offcanvas-canvas ul a {
+    color: #ccc;
+    padding: 8px 20px;
+    display: block;
+    font-size: 1.4rem;
+    font-size: 1.4em;
+    border-top: 1px solid #000;
+}
+#offcanvas-canvas ul ul a {
+    padding: 8px 20px 8px 30px;
+    font-size: 1em;
+    font-size: 1rem;
+}
+#offcanvas-canvas ul a:hover, #offcanvas-canvas ul a.active {
+    background-color: #353535;
+}
+#offcanvas-canvas .collapse-trigger {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 43px;
+    width: 30px;
+    z-index: 30;
+}
+#offcanvas-canvas .collapse-arrow {
+    width: 0;
+    height: 0;
+    margin: 20px 5px 0 5px;
+    display: block;
+}
+#offcanvas-canvas .trigger-closed .collapse-arrow {
+    border-left: 5px solid rgba(0, 0, 0, 0);
+    border-right: 5px solid rgba(0, 0, 0, 0);
+    border-top: 5px solid #fff;
+}
+#offcanvas-canvas .trigger-collapsed .collapse-arrow {
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-left: 5px solid #fff;
+}
+#offcanvas-canvas ul.child-closed {
+    display: none;
+}
+#offcanvas-canvas ul.child-collapsed {
+    display: block;
+}
