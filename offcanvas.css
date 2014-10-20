@@ -109,13 +109,13 @@
     right: 0;
     top: 0;
     height: 43px;
-    width: 30px;
+    width: 40px;
     z-index: 30;
 }
 #offcanvas-canvas .collapse-arrow {
     width: 0;
     height: 0;
-    margin: 20px 5px 0 5px;
+    margin: 20px 5px 0 15px;
     display: block;
 }
 #offcanvas-canvas .trigger-closed .collapse-arrow {

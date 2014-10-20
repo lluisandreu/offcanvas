@@ -5,23 +5,6 @@
     var canvas = document.querySelector(".offcanvas-page-wrapper");
     var container = document.querySelector(".offcanvas-page-container");
 
-
-    function detectmob() {
-        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    if (detectmob()) {
-        eventtype = "touchstart";
-    } else if (navigator.userAgent.match(/iemobile/i)) {
-        // Touch event for Window Mobiles
-        eventtype = "MSPointerDown";
-    } else {
-        eventtype = "click";
-    }
-
     function init() {
         overlay();
         toggle();
@@ -31,13 +14,13 @@
     function toggle() {
         if (document.addEventListener) { // For all major browsers, except IE 8 and earlier
 
-            opener.addEventListener(eventtype, toggleMenu);
-            closer.addEventListener(eventtype, toggleMenu);
+            opener.addEventListener("click", toggleMenu);
+            closer.addEventListener("click", toggleMenu);
 
 
         } else if (document.attachEvent) { // For IE 8 and earlier versions
-            opener.attachEvent(eventtype, toggleMenu);
-            closer.attachEvent(eventtype, toggleMenu);
+            opener.attachEvent("click", toggleMenu);
+            closer.attachEvent("click", toggleMenu);
 
         }
 
@@ -69,7 +52,7 @@
             container.appendChild(ol);
 
             if (document.addEventListener) {
-                ol.addEventListener(eventtype, closeMenu);
+                ol.addEventListener("click", closeMenu);
             }
         }
     }
@@ -81,7 +64,7 @@
             trigger.innerHTML = '<span class="collapse-arrow"></span>';
             trigger.className = "collapse-trigger trigger-closed";
             parent[i].appendChild(trigger);
-            trigger.addEventListener(eventtype, function() {
+            trigger.addEventListener("click", function() {
                 if (classie.has(this, 'trigger-closed')) {
                     classie.add(this, 'trigger-collapsed');
                     classie.remove(this, 'trigger-closed');
