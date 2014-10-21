@@ -217,7 +217,7 @@ function offcanvas_addEntypo(){
     $load_entypo = variable_get('offcanvas_extra_entypo');
     if($load_entypo) {
         drupal_add_css(
-          "/*Add entypo font, called from offcanvas module*/ @font-face{font-family:entypo;src:url(".drupal_get_path("module", "offcanvas")."/fonts/entypo.woff) format('woff');src:url(" . drupal_get_path("module", "offcanvas") . "/fonts/entypo.eot) format('eot');font-stretch:normal;font-weight:400}",
+          "/*Add entypo font, called from offcanvas module*/ @font-face{font-family:entypo;src:url(".drupal_get_path("module", "offcanvas")."/fonts/entypo.woff) format('woff');src:url(" . drupal_get_path("module", "offcanvas") . "/fonts/entypo.eot) format('eot');font-stretch:normal;font-weight:400} #offcanvas-canvas i {font-family: 'entypo' !important;}",
           array(
             'group' => CSS_DEFAULT,
             'type' => 'inline',

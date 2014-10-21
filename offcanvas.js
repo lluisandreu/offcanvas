@@ -1,9 +1,9 @@
 (function() {
 
-    var opener = document.querySelector(".offcanvas-trigger");
-    var closer = document.querySelector(".offcanvas-close");
-    var canvas = document.querySelector(".offcanvas-page-wrapper");
-    var container = document.querySelector(".offcanvas-page-container");
+    var opener = document.querySelector(".offcanvas-trigger"),
+        closer = document.querySelector(".offcanvas-close"),
+        canvas = document.querySelector(".offcanvas-page-wrapper"),
+        container = document.querySelector(".offcanvas-page-container");
 
     function init() {
         overlay();
@@ -72,7 +72,6 @@
                     classie.add(this, 'trigger-closed');
                     classie.remove(this, 'trigger-collapsed');
                 }
-
                 var child = this.previousSibling;
                 if (!classie.has(child, 'child-collapsed')) {
                     classie.add(child, 'child-collapsed');

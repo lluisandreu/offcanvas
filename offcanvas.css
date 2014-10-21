@@ -39,8 +39,8 @@
     overflow: hidden;
     z-index: -999;
     cursor: pointer;
-    -webkit-transition: .5s ease all;
-    transition: .5s ease all;
+    -webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
 }
 .offcanvas-page-wrapper.open .offcanvas-overlay {
     z-index: 999;
@@ -56,12 +56,18 @@
 }
 /*////// Off Canvas Style Settings //////*/
 
+#offcanvas-menu i {vertical-align: middle;}
+
+.offcanvas-trigger {
+    font-size: 1.5rem;
+    font-size: 1.5em;
+}
 #offcanvas-canvas {
     background-color: #232323;
 }
 .offcanvas-close {
     text-align: right;
-    padding: 10px 20px 10px 0;
+    padding: 10px 10px 10px 0;
     margin-bottom: 10px;
     background-color: #353535;
 }
@@ -111,6 +117,7 @@
     height: 43px;
     width: 40px;
     z-index: 30;
+    cursor: pointer;
 }
 #offcanvas-canvas .collapse-arrow {
     width: 0;
@@ -129,8 +136,16 @@
     border-left: 5px solid #fff;
 }
 #offcanvas-canvas ul.child-closed {
-    display: none;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 #offcanvas-canvas ul.child-collapsed {
-    display: block;
+    height: auto;
+    opacity: 1;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
