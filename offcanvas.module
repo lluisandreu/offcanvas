@@ -75,7 +75,7 @@ $form['offcanvas_extra'] = array(
     'offcanvas_extra_entypo' => array(
         '#type' => 'checkbox',
         '#title' => t('Load Entypo Font'),
-        '#default_value' => variable_get('offcanvas_extra_entypo', TRUE),
+        '#default_value' => variable_get('offcanvas_extra_entypo', FALSE),
     ),
 );
 }
@@ -228,4 +228,3 @@ function offcanvas_addEntypo(){
         );
     }
 }
-
